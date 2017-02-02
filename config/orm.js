@@ -2,31 +2,62 @@ var connection = require("./connection.js");
 
 var orm = {
 
+  selectAll: function(table, callback){
 
-    selectAll: function(table, callback){
-        connection.query("SELECT * FROM ??", [table], function(err, results){
-            if(err) throw err;
-            callback(results);
-        });
-    },
+    var query = "SELECT * FROM ??;";
 
+    connection.query(query, [table], function(err, result){
+      if (err) {
+        throw err;
+      }
 
-    insertOne: function(table, name, callback){
-        connection.query("INSERT INTO ?? (burger_name, devoured) VALUES (?, false)", [table, name], function(err, results){
-            if(err) throw err;
-            callback(results);
-        });
-    },
+      callback(result);
 
+    });
 
-    updateOne: function(table, id, callback){
-        connection.query("UPDATE ?? SET devoured=1 WHERE id = ?", [table, id], function(err, results){
-            if(err) throw err;
-            callback(results);
-        });
-    }
+  },
 
 
+  insertOne: function(table, column, value, callback){
+
+    var query = "INSERT INTO " + table;
+    query += " (" + column.toString() + ") ";
+    query += "VALUES (?)";
+
+    connection.query(query, [value], function(err, result){
+      if (err){
+        throw err;
+      }
+
+      callback(result);
+
+    });
+  },
+
+
+  updateOne: function(table, column, value, addColumn, addValue, callback){
+
+    var query = "UPDATE " + table;
+    query += " SET " + column;
+    query += " = ";
+    query += value + " WHERE ";
+    query += addColumn + " = ?";
+    
+    var addValue = parseInt(addValue);
+    
+    console.log(query);
+
+    connection.query(query, [addValue], function(err, result){
+      if (err){
+        throw err;
+      }
+
+      callback(result);
+
+    });
+  }
 };
+
+
 
 module.exports = orm;

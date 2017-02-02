@@ -1,33 +1,35 @@
 var orm = require("../config/orm.js");
 
+
 var burger = {
 
-    all: function(callback){
+  selectAll: function(callback){
 
-        orm.selectAll("burgers", function(res){
-            callback(res);
-        });
-        
-    },
+    orm.selectAll("burgers", function(result){
+      callback(result);
+    });
+
+  },
 
 
-    create: function(name, callback) {
+  insertOne: function(value, callback){
 
-        orm.insertOne("burgers", name, function(res) {
-          callback(res);
-        });
+    orm.insertOne("burgers", "burger_name", value, function(result){
+      callback(result);
+    });
 
-    },
+  },
+
+
+  updateOne: function(addValue, callback){
+
+    orm.updateOne("burgers", "devoured", 1, "id", addValue, function(result){
+      callback(result);
+    });
     
-
-    devour: function(id, callback){         // update
-
-        orm.updateOne("burgers", id, function(res){
-            callback(res);
-        });
-
-    }
+  }
 
 };
+
 
 module.exports = burger;
